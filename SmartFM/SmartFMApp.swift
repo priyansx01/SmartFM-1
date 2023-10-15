@@ -6,12 +6,15 @@
 //
 
 import SwiftUI
+import GoogleMaps
 
 @main
 struct SmartFMApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            if GMSServices.provideAPIKey("AIzaSyBJGpJhzzL5VqwseWSl9AwVbStK83Ztzis") {
+                ContentView()
+            }
         }
     }
 }

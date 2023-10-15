@@ -71,7 +71,7 @@ class Globals {
 
     public static func isLoggedIn() -> Bool {
         let status = getLoggedInStatus()
-        
+        print("Globals.isLoggedIn(): " + status)
         if status.isEmpty {
             return false
         }
@@ -99,6 +99,26 @@ class Globals {
         }
         
         return false
+    }
+    
+    public static func resetData() {
+        Globals.saveData(key: Globals.USER_ID_KEY, value: "")
+        Globals.saveData(key: Globals.USER_TOKEN_KEY, value: "")
+        Globals.saveData(key: Globals.USER_NAME_KEY, value: "")
+        Globals.saveData(key: Globals.CHECK_IN_OUT_KEY, value: "")
+        Globals.saveData(key: Globals.IS_LOGGED_IN_KEY, value: "")
+        Globals.saveData(key: Globals.IS_APPROVED_KEY, value: "")
+        
+    }
+    
+    public static func printAllKeyData() -> Bool {
+        print("USER_ID_KEY: " + Globals.getData(key: Globals.USER_ID_KEY))
+        print("USER_TOKEN_KEY: " + Globals.getData(key: Globals.USER_TOKEN_KEY))
+        print("USER_NAME_KEY: " + Globals.getData(key: Globals.USER_NAME_KEY))
+        print("CHECK_IN_OUT_KEY: " + Globals.getData(key: Globals.CHECK_IN_OUT_KEY))
+        print("IS_LOGGED_IN_KEY: " + Globals.getData(key: Globals.IS_LOGGED_IN_KEY))
+        print("IS_APPROVED_KEY: " + Globals.getData(key: Globals.IS_APPROVED_KEY))
+        return true
     }
 
 }

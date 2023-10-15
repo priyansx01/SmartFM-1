@@ -28,7 +28,7 @@ struct MyWebView: UIViewRepresentable {
     }
     
     func updateUIView(_ uiView: UIViewType, context: Context) {
-        var request = URLRequest(url: url)
+        let request = URLRequest(url: url)
         uiView.load(request)
     }
 }

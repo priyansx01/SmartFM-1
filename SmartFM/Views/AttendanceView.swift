@@ -6,3 +6,10 @@
 //
 
 import Foundation
+import SwiftUI
+
+struct AttendanceView: View {
+    var body: some View {
+        Text("attendance view")
+    }
+}
