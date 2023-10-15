@@ -11,6 +11,10 @@
 		4D0A8DC72ADBB38D00EFDF9D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D0A8DC62ADBB38D00EFDF9D /* ContentView.swift */; };
 		4D0A8DC92ADBB38F00EFDF9D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4D0A8DC82ADBB38F00EFDF9D /* Assets.xcassets */; };
 		4D0A8DCC2ADBB38F00EFDF9D /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4D0A8DCB2ADBB38F00EFDF9D /* Preview Assets.xcassets */; };
+		4D6740902ADBB7E700F18A18 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D67408F2ADBB7E700F18A18 /* LoginView.swift */; };
+		4D6740922ADBB80200F18A18 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D6740912ADBB80200F18A18 /* DashboardView.swift */; };
+		4D6740942ADBB81400F18A18 /* AttendanceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D6740932ADBB81400F18A18 /* AttendanceView.swift */; };
+		4D6740962ADBB82F00F18A18 /* WebBrowserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D6740952ADBB82F00F18A18 /* WebBrowserView.swift */; };
 		FE516B13C72DFE9DD6277CAF /* Pods_SmartFM.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0661CCA1269F7DD26A1EB46F /* Pods_SmartFM.framework */; };
 /* End PBXBuildFile section */
 
@@ -22,6 +26,10 @@
 		4D0A8DC62ADBB38D00EFDF9D /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		4D0A8DC82ADBB38F00EFDF9D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4D0A8DCB2ADBB38F00EFDF9D /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		4D67408F2ADBB7E700F18A18 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		4D6740912ADBB80200F18A18 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		4D6740932ADBB81400F18A18 /* AttendanceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttendanceView.swift; sourceTree = "<group>"; };
+		4D6740952ADBB82F00F18A18 /* WebBrowserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebBrowserView.swift; sourceTree = "<group>"; };
 		5B1537FBF3BD4829D9262AA8 /* Pods-SmartFM.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmartFM.release.xcconfig"; path = "Target Support Files/Pods-SmartFM/Pods-SmartFM.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -58,6 +66,7 @@
 		4D0A8DC32ADBB38D00EFDF9D /* SmartFM */ = {
 			isa = PBXGroup;
 			children = (
+				4D67408E2ADBB7D300F18A18 /* Views */,
 				4D0A8DC42ADBB38D00EFDF9D /* SmartFMApp.swift */,
 				4D0A8DC62ADBB38D00EFDF9D /* ContentView.swift */,
 				4D0A8DC82ADBB38F00EFDF9D /* Assets.xcassets */,
@@ -74,6 +83,17 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
+		4D67408E2ADBB7D300F18A18 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				4D67408F2ADBB7E700F18A18 /* LoginView.swift */,
+				4D6740912ADBB80200F18A18 /* DashboardView.swift */,
+				4D6740932ADBB81400F18A18 /* AttendanceView.swift */,
+				4D6740952ADBB82F00F18A18 /* WebBrowserView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		BBFC431ADD94ABF3FBDB1E7A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -88,7 +108,6 @@
 				3A48B5FD2D92190C5C741986 /* Pods-SmartFM.debug.xcconfig */,
 				5B1537FBF3BD4829D9262AA8 /* Pods-SmartFM.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -206,8 +225,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4D6740902ADBB7E700F18A18 /* LoginView.swift in Sources */,
+				4D6740922ADBB80200F18A18 /* DashboardView.swift in Sources */,
+				4D6740962ADBB82F00F18A18 /* WebBrowserView.swift in Sources */,
 				4D0A8DC72ADBB38D00EFDF9D /* ContentView.swift in Sources */,
 				4D0A8DC52ADBB38D00EFDF9D /* SmartFMApp.swift in Sources */,
+				4D6740942ADBB81400F18A18 /* AttendanceView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
