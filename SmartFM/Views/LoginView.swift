@@ -16,16 +16,19 @@ struct LoginView: View {
     @State private var isLogging: Bool = false
     @State private var errorMessage: String = ""
     
-    @State private var isLoggedIn: Bool = false
+    //@State private var isLoggedIn: Bool = false
+    @AppStorage(Globals.IS_LOGGED_IN_KEY) private var isLoggedIn: String = ""
+
     
     var body: some View {
         
-        if(!isLoggedIn) {
+        if(isLoggedIn != "1") {
             VStack(alignment: .leading, spacing: 0.0) {
                 Spacer()
-                Image("ismart_logo")
+                Image("ismart_logo2")
                     .resizable(resizingMode: .stretch)
                     .aspectRatio(contentMode: .fit)
+                    .padding(.horizontal, 15.0)
                 Spacer()
                 
                 Text("Mobile number")
@@ -167,9 +170,16 @@ struct LoginView: View {
                 
                 // response is okay
                 // saving user data
-                if let id = result["id"] {
-                    Globals.saveData(key: Globals.USER_ID_KEY, value: String(id as! Int))
+                //if let id = result["id"] {
+                  //  Globals.saveData(key: Globals.USER_ID_KEY, value: String(id as! Int))
+                //}
+                
+                if let id = result["id"] as? Int {
+                    Globals.saveData(key: Globals.USER_ID_KEY, value: String(id))
+                } else {
+                    print("Error: id is not an Int")
                 }
+
                 
                 if let user_token = result["user_token"] {
                     Globals.saveData(key: Globals.USER_TOKEN_KEY, value: user_token as! String)
@@ -193,7 +203,7 @@ struct LoginView: View {
                 print("saving logged in data")
                 Globals.printAllKeyData()
                 
-                isLoggedIn = true
+                isLoggedIn = "1"
             } catch {
                 print(error)
                 isLogging = false

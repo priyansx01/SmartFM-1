@@ -25,6 +25,7 @@ class Globals {
     public static let WEBUI_VIEW = "WEBUI_VIEW"
     public static let ATTENDANCE_VIEW = "ATTENDANCE_VIEW"
     public static let CURRENT_VIEW = LOGIN_VIEW
+    public static var allGeoFences: [Dictionary<String,Any>] = []
     
     
     public static func saveData(key: String, value: String) {
@@ -68,7 +69,7 @@ class Globals {
         let url = BASE_URL + page + "?user_token=" + token
         return url
     }
-
+    
     public static func isLoggedIn() -> Bool {
         let status = getLoggedInStatus()
         print("Globals.isLoggedIn(): " + status)
@@ -87,17 +88,25 @@ class Globals {
         return false
     }
     
-    public func isCheckedIn() -> Bool {
+    public static func isCheckedIn() async -> Bool {
+        await initailizeCheckInDataFromServer();
         let status = Globals.getCheckInStatus()
-        
+        print("isCheckedIn() status " + status)
         if status.isEmpty {
+            print("isCheckedIn() returning false because empty")
             return false;
         }
         
         if status == "1" {
+            print("isCheckedIn() returning true because '1'")
             return true
         }
         
+        if Int(status) == 1 {
+            print("isCheckedIn() returning true because int 1")
+            return true
+        }
+        print("isCheckedIn() returning false because reach end")
         return false
     }
     
@@ -119,6 +128,201 @@ class Globals {
         print("IS_LOGGED_IN_KEY: " + Globals.getData(key: Globals.IS_LOGGED_IN_KEY))
         print("IS_APPROVED_KEY: " + Globals.getData(key: Globals.IS_APPROVED_KEY))
         return true
+    }
+    
+    public static func initialize() async -> Bool {
+        print("initializing global")
+        await initailizeCheckInDataFromServer()
+        await loadGeofencing()
+        print("intialization global end")
+        return true
+    }
+    
+    public static func initailizeCheckInDataFromServer() async {
+        guard isLoggedIn(),
+              let url = URL(string: Globals.API_URL) else {
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let body: [String: AnyHashable] = [
+            "user_token": getUserToken(),
+            "action": "is_user_checked_in"
+        ]
+        
+        request.httpBody = try? JSONSerialization.data(withJSONObject: body, options: [])
+
+        do {
+            let (data, _) = try await URLSession.shared.data(for: request)
+
+            let json = try JSONSerialization.jsonObject(with: data, options: [])
+            guard let result = json as? [String: Any] else { return }
+            print(result)
+            if let status_code = result["status_code"] as? Int, status_code != 200 {
+                return
+            }
+            
+            if let checked_in = result["checked_in"] as? Int {
+                Globals.saveData(key: Globals.CHECK_IN_OUT_KEY, value: checked_in == 1 ? "1" : "0")
+            }
+
+            printAllKeyData()
+        } catch {
+            print("Error:", error)
+            if let str = String(data: request.httpBody ?? Data(), encoding: .utf8) {
+                print("Request body: \(str)")
+            }
+        }
+    }
+
+    
+    public static func __initailizeCheckInDataFromServer() async {
+        if !isLoggedIn() {
+            return
+        }
+        
+        guard let url = URL(string: Globals.API_URL) else {
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let body: [String: AnyHashable] = [
+            "user_token": getUserToken(),
+            "action": "is_user_checked_in"
+        ]
+        
+        request.httpBody = try? JSONSerialization.data(withJSONObject: body, options: [])
+
+        let task = URLSession.shared.dataTask(with: request) {data, _, error in
+            guard let data = data, error == nil else {
+                return
+            }
+            do {
+                
+                // handling response
+                let response = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
+                print(response)
+                guard let result = response as? [String:Any] else {
+                
+                    return
+                }
+                
+                
+                // is response ok?
+                if let status_code = result["status_code"] {
+                    if status_code as! Int != 200 {
+                        return
+                        
+                    }
+                }
+                
+                if let checked_in = result["checked_in"] {
+                    let is_in = checked_in as! Int
+                    
+                    if is_in == 1 {
+                        Globals.saveData(key: Globals.CHECK_IN_OUT_KEY, value: "1")
+                    } else {
+                        Globals.saveData(key: Globals.CHECK_IN_OUT_KEY, value: "0")
+                    }
+                }
+                
+                printAllKeyData()
+                
+            } catch {
+                
+                print(error)
+                if let str = String(data: data, encoding: String.Encoding.utf8) {
+                    print(str)
+                }
+                
+            }
+            
+        }
+        
+        task.resume()
+    }
+    
+    public static func loadGeofencing() async -> Int {
+        
+        guard let url = URL(string: Globals.API_URL) else {
+            
+            return -1
+        }
+        
+        // http request
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        let body: [String: AnyHashable] = [
+            "action": "geofences"
+        ]
+        
+        request.httpBody = try? JSONSerialization.data(withJSONObject: body, options: .fragmentsAllowed)
+        
+        let task = URLSession.shared.dataTask(with: request) {data, _, error in
+            guard let data = data, error == nil else {
+                
+                return
+            }
+            do {
+                print("received login response")
+                // handling response
+                let response = try JSONSerialization.jsonObject(with: data, options: .mutableContainers)
+                
+                guard let result = response as? [String:Any] else {
+                    
+                    return
+                }
+                
+                
+                // is response ok?
+                if let status_code = result["status_code"] {
+                    if status_code as! Int != 200 {
+                        return
+                    }
+                }
+                
+                // response is okay
+                // loading geofences
+                if let json_data = result["json_data"] {
+                    
+                    let geofences_raw = json_data as! String
+                    
+                    
+                    let geofences_data = geofences_raw.data(using: .utf8)!
+                    do {
+                        if let jsonArray = try JSONSerialization.jsonObject(
+                            with: geofences_data, options : .allowFragments) as? [Dictionary<String,Any>]
+                        {
+                            allGeoFences = jsonArray
+                            
+                        } else {
+                            print("bad json")
+                        }
+                    } catch let error as NSError {
+                        print(error)
+                    }
+                    
+                }
+                
+                
+                
+            } catch {
+                print(error)
+                
+            }
+            
+        }
+        
+        task.resume()
+        
+        return -1
     }
 
 }
