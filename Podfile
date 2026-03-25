@@ -1,6 +1,4 @@
-# Uncomment the next line to define a global platform for your project
-# platform :ios, '9.0'
-source 'https://github.com/CocoaPods/Specs.git'
+source 'https://cdn.cocoapods.org/'
 platform :ios, '14.1'
 
 target 'SmartFM' do
@@ -8,6 +6,6 @@ target 'SmartFM' do
   use_frameworks!
 
   # Pods for LoginForm
-  pod 'GoogleMaps', '8.2.0'
+  pod 'GoogleMaps'
 
 end

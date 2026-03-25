@@ -263,8 +263,14 @@ class AttendanceController {
     }
     
     public static func getBase64Image() -> String {
-        let imageData:NSData = selectedImage?.pngData()! as! NSData
+        // Safely unwrap both the image and the PNG data
+        guard let image = selectedImage,
+              let imageData = image.pngData() else {
+            print("Warning: No image found or failed to convert to PNG data.")
+            return "" // Gracefully return an empty string instead of crashing
+        }
         
+        // Convert directly from Data to base64 string
         return imageData.base64EncodedString()
     }
     
